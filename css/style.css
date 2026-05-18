@@ -1,0 +1,927 @@
+/* ============================================================
+   style.css - CineLog Styles (Fully Responsive)
+   We use CSS variables for dark/light mode theming,
+   and media queries to handle different screen sizes.
+   ============================================================ */
+
+/* -------------------------------------------------------
+   CSS VARIABLES (like "settings" for colors)
+   Changing data-theme="dark" on <body> overrides these
+   ------------------------------------------------------- */
+:root {
+    --bg-color:       #f4f4f4;
+    --card-bg:        #ffffff;
+    --text-color:     #333333;
+    --text-muted:     #666666;
+    --border-color:   #dddddd;
+    --primary-color:  #e50914;
+    --primary-hover:  #b0070f;
+    --nav-bg:         #1a1a2e;
+    --nav-text:       #ffffff;
+    --star-color:     #f5c518;
+    --shadow:         0 2px 8px rgba(0, 0, 0, 0.1);
+    --input-bg:       #ffffff;
+
+    /* Spacing scale — change one number to rescale everywhere */
+    --space-xs:  4px;
+    --space-sm:  8px;
+    --space-md:  16px;
+    --space-lg:  24px;
+    --space-xl:  40px;
+
+    /* Typography scale */
+    --text-sm:   13px;
+    --text-base: 15px;
+    --text-lg:   18px;
+    --text-xl:   24px;
+    --text-2xl:  32px;
+}
+
+[data-theme="dark"] {
+    --bg-color:     #121212;
+    --card-bg:      #1e1e1e;
+    --text-color:   #e0e0e0;
+    --text-muted:   #aaaaaa;
+    --border-color: #2e2e2e;
+    --shadow:       0 2px 12px rgba(0, 0, 0, 0.5);
+    --input-bg:     #2a2a2a;
+}
+
+/* -------------------------------------------------------
+   RESET & BASE
+   ------------------------------------------------------- */
+*,
+*::before,
+*::after {
+    margin:     0;
+    padding:    0;
+    box-sizing: border-box; /* Makes width/height include padding & border */
+}
+
+html {
+    /* Makes 1rem = 10px so math is easy (e.g. 1.6rem = 16px) */
+    font-size: 62.5%;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family:      'Segoe UI', Arial, sans-serif;
+    font-size:        var(--text-base);  /* 15px */
+    line-height:      1.6;
+    background-color: var(--bg-color);
+    color:            var(--text-color);
+    min-height:       100vh;
+    /* Smooth color transition when switching dark/light */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+img {
+    max-width: 100%; /* Images never overflow their container */
+    display:   block;
+}
+
+a {
+    color:           var(--primary-color);
+    text-decoration: none;
+    transition:      color 0.2s ease;
+}
+
+a:hover {
+    color: var(--primary-hover);
+}
+
+/* -------------------------------------------------------
+   NAVIGATION BAR
+   ------------------------------------------------------- */
+.navbar {
+    background-color: var(--nav-bg);
+    /* Sticky means it stays at the top when you scroll */
+    position: sticky;
+    top:       0;
+    z-index:   100; /* Stays on top of other content */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* The inner wrapper limits max width and centers content */
+.navbar-inner {
+    max-width:     1200px;
+    margin:        0 auto;
+    padding:       0 var(--space-lg);
+    height:        60px;
+    display:       flex;
+    align-items:   center;
+    justify-content: space-between;
+}
+
+/* Brand / Logo link */
+.navbar .brand {
+    font-size:   2.2rem;  /* 22px */
+    font-weight: 700;
+    color:       var(--primary-color) !important;
+    letter-spacing: 1px;
+    white-space: nowrap; /* Never wraps onto two lines */
+    flex-shrink: 0;      /* Never shrinks in a flex container */
+}
+
+/* The right side of the nav holding the links */
+.navbar-links {
+    display:     flex;
+    align-items: center;
+    gap:         var(--space-md);
+    list-style:  none;
+}
+
+.navbar-links a {
+    color:       var(--nav-text);
+    font-size:   1.4rem; /* 14px */
+    font-weight: 500;
+    white-space: nowrap;
+    padding:     var(--space-xs) var(--space-sm);
+    border-radius: 4px;
+    transition:  background-color 0.2s, color 0.2s;
+}
+
+.navbar-links a:hover {
+    color:            var(--primary-color);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Hamburger menu button — hidden on desktop, shown on mobile */
+.nav-hamburger {
+    display:          none;   /* Hidden by default */
+    background:       none;
+    border:           none;
+    cursor:           pointer;
+    padding:          var(--space-sm);
+    flex-direction:   column;
+    gap:              5px;
+    border-radius:    4px;
+    transition:       background 0.2s;
+}
+
+.nav-hamburger:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+/* The three lines of the hamburger icon */
+.nav-hamburger span {
+    display:          block;
+    width:            24px;
+    height:           2px;
+    background-color: var(--nav-text);
+    border-radius:    2px;
+    /* Smooth animation for opening/closing */
+    transition:       transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* When the nav is open, animate the hamburger into an X */
+.nav-hamburger.is-open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+.nav-hamburger.is-open span:nth-child(2) {
+    opacity:   0;
+    transform: scaleX(0);
+}
+.nav-hamburger.is-open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Theme toggle button */
+.theme-toggle-btn {
+    background:    none;
+    border:        1px solid rgba(255, 255, 255, 0.4);
+    color:         var(--nav-text);
+    padding:       5px 12px;
+    border-radius: 20px;
+    cursor:        pointer;
+    font-size:     1.3rem; /* 13px */
+    white-space:   nowrap;
+    transition:    background-color 0.2s, border-color 0.2s;
+}
+
+.theme-toggle-btn:hover {
+    background-color: var(--primary-color);
+    border-color:     var(--primary-color);
+}
+
+/* -------------------------------------------------------
+   PAGE LAYOUT
+   ------------------------------------------------------- */
+
+/* Main content area — centers and limits width */
+.main-container {
+    max-width: 1200px;
+    margin:    0 auto;
+    padding:   var(--space-lg) var(--space-lg);
+}
+
+/* Narrower container for forms and single-column pages */
+.narrow-container {
+    max-width: 520px;
+    margin:    var(--space-xl) auto;
+    padding:   0 var(--space-md);
+}
+
+/* -------------------------------------------------------
+   TYPOGRAPHY
+   ------------------------------------------------------- */
+h1, h2, h3, h4 {
+    color:       var(--text-color);
+    line-height: 1.3;
+}
+
+h1 { font-size: clamp(2.2rem, 4vw, 3rem); margin-bottom: var(--space-sm); }
+h2 { font-size: clamp(1.8rem, 3vw, 2.4rem); margin-bottom: var(--space-sm); }
+h3 { font-size: clamp(1.5rem, 2.5vw, 1.9rem); margin-bottom: var(--space-sm); }
+
+/*
+  clamp(min, preferred, max) — automatically scales between min and max
+  based on viewport width. Great for responsive headings!
+*/
+
+p {
+    font-size:     var(--text-base);
+    margin-bottom: var(--space-sm);
+}
+
+.text-muted {
+    color:     var(--text-muted);
+    font-size: var(--text-sm);
+}
+
+.text-center { text-align: center; }
+.text-right  { text-align: right; }
+
+/* -------------------------------------------------------
+   CARDS
+   ------------------------------------------------------- */
+.card {
+    background-color: var(--card-bg);
+    border:           1px solid var(--border-color);
+    border-radius:    10px;
+    padding:          var(--space-lg);
+    margin-bottom:    var(--space-lg);
+    box-shadow:       var(--shadow);
+    transition:       background-color 0.3s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+/* -------------------------------------------------------
+   FORMS
+   ------------------------------------------------------- */
+.form-group {
+    margin-bottom: var(--space-md);
+}
+
+.form-group label {
+    display:       block;
+    margin-bottom: 6px;
+    font-weight:   600;
+    font-size:     var(--text-sm);
+    color:         var(--text-color);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width:            100%; /* Always full width of their container */
+    padding:          10px 14px;
+    border:           1px solid var(--border-color);
+    border-radius:    6px;
+    font-size:        var(--text-base);
+    background-color: var(--input-bg);
+    color:            var(--text-color);
+    transition:       border-color 0.2s, box-shadow 0.2s;
+    /* Inherit font so inputs look consistent */
+    font-family:      inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline:    none;
+    border-color: var(--primary-color);
+    /* Soft glow on focus */
+    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.12);
+}
+
+.form-group textarea {
+    min-height: 110px;
+    resize:     vertical; /* Only allow vertical resizing */
+}
+
+/* Two inputs side by side (for expiry + CVV on payment form) */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap:     var(--space-md);
+}
+
+/* -------------------------------------------------------
+   BUTTONS
+   ------------------------------------------------------- */
+.btn {
+    display:         inline-flex;
+    align-items:     center;
+    justify-content: center;
+    gap:             6px;
+    padding:         10px 22px;
+    border:          none;
+    border-radius:   6px;
+    cursor:          pointer;
+    font-size:       var(--text-sm);
+    font-weight:     600;
+    font-family:     inherit;
+    text-decoration: none;
+    text-align:      center;
+    white-space:     nowrap; /* Never wraps text onto two lines */
+    transition:      background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s;
+    /* min-width prevents very tiny buttons */
+    min-width:       80px;
+}
+
+.btn:hover {
+    transform:  translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+    transform: translateY(0);  /* Remove lift when clicked */
+}
+
+/* Full-width button utility */
+.btn-block {
+    width:   100%;
+    display: flex;
+}
+
+/* Color variants */
+.btn-primary   { background-color: var(--primary-color); color: white; }
+.btn-primary:hover { background-color: var(--primary-hover); color: white; }
+
+.btn-secondary { background-color: #555; color: white; }
+.btn-secondary:hover { background-color: #333; color: white; }
+
+.btn-danger    { background-color: #dc3545; color: white; }
+.btn-danger:hover { background-color: #b02a37; color: white; }
+
+.btn-success   { background-color: #28a745; color: white; }
+.btn-success:hover { background-color: #1e7e34; color: white; }
+
+.btn-outline {
+    background-color: transparent;
+    border:           2px solid var(--primary-color);
+    color:            var(--primary-color);
+}
+.btn-outline:hover {
+    background-color: var(--primary-color);
+    color:            white;
+}
+
+/* Size variants */
+.btn-sm { padding: 6px 14px; font-size: 1.2rem; min-width: 60px; }
+.btn-lg { padding: 14px 30px; font-size: 1.6rem; }
+
+/* -------------------------------------------------------
+   ALERTS / MESSAGES
+   ------------------------------------------------------- */
+.alert {
+    padding:       12px var(--space-md);
+    border-radius: 6px;
+    margin-bottom: var(--space-md);
+    font-size:     var(--text-sm);
+    border:        1px solid transparent;
+    display:       flex;
+    align-items:   flex-start;
+    gap:           var(--space-sm);
+}
+
+.alert::before {
+    font-size:  1.6rem;
+    flex-shrink: 0; /* Icon never shrinks */
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color:            #155724;
+    border-color:     #c3e6cb;
+}
+.alert-success::before { content: "✅"; }
+
+.alert-error {
+    background-color: #f8d7da;
+    color:            #721c24;
+    border-color:     #f5c6cb;
+}
+.alert-error::before { content: "❌"; }
+
+.alert-info {
+    background-color: #d1ecf1;
+    color:            #0c5460;
+    border-color:     #bee5eb;
+}
+.alert-info::before { content: "ℹ️"; }
+
+.alert-warning {
+    background-color: #fff3cd;
+    color:            #856404;
+    border-color:     #ffc107;
+}
+.alert-warning::before { content: "⚠️"; }
+
+/* -------------------------------------------------------
+   STAR RATINGS
+   ------------------------------------------------------- */
+.stars {
+    color:          var(--star-color);
+    font-size:      1.8rem;
+    letter-spacing: 2px;
+    display:        inline-block;
+}
+
+/* -------------------------------------------------------
+   DASHBOARD STATS BAR
+   ------------------------------------------------------- */
+.stats-bar {
+    display:               grid;
+    /* auto-fit: creates as many columns as fit
+       minmax(120px, 1fr): each column is at least 120px wide */
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap:                   var(--space-md);
+    margin-bottom:         var(--space-lg);
+}
+
+.stat-box {
+    background-color: var(--card-bg);
+    border:           1px solid var(--border-color);
+    border-radius:    10px;
+    padding:          var(--space-md) var(--space-lg);
+    text-align:       center;
+    box-shadow:       var(--shadow);
+    transition:       transform 0.2s ease;
+}
+
+.stat-box:hover {
+    transform: translateY(-2px);
+}
+
+.stat-number {
+    font-size:   3rem;
+    font-weight: 700;
+    color:       var(--primary-color);
+    line-height: 1;
+}
+
+.stat-label {
+    font-size:  var(--text-sm);
+    color:      var(--text-muted);
+    margin-top: var(--space-xs);
+}
+
+/* -------------------------------------------------------
+   MOVIE GRID
+   ------------------------------------------------------- */
+.movie-grid {
+    display:               grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap:                   var(--space-lg);
+    margin-top:            var(--space-md);
+}
+
+.movie-card {
+    background-color: var(--card-bg);
+    border:           1px solid var(--border-color);
+    border-radius:    10px;
+    padding:          var(--space-md);
+    box-shadow:       var(--shadow);
+    /* Flex column so the action buttons always stay at the bottom */
+    display:          flex;
+    flex-direction:   column;
+    transition:       transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+}
+
+.movie-card:hover {
+    transform:  translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.movie-card h3 {
+    color:         var(--primary-color);
+    font-size:     1.6rem;
+    margin-bottom: var(--space-sm);
+    /* Limit title to 2 lines with an ellipsis if too long */
+    display:            -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow:           hidden;
+}
+
+.movie-card .review-text {
+    color:       var(--text-muted);
+    font-size:   var(--text-sm);
+    margin:      var(--space-sm) 0;
+    line-height: 1.5;
+    /* Grow to fill available space so buttons stay at bottom */
+    flex-grow:   1;
+    /* Limit review preview to 3 lines */
+    display:            -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow:           hidden;
+}
+
+.movie-date {
+    font-size:  1.2rem;
+    color:      var(--text-muted);
+    margin-top: var(--space-sm);
+}
+
+/* Action buttons at the bottom of each movie card */
+.card-actions {
+    margin-top: var(--space-md);
+    display:    flex;
+    gap:        var(--space-sm);
+    flex-wrap:  wrap; /* Wrap to next line on very small cards */
+}
+
+/* -------------------------------------------------------
+   PROFILE PAGE — TWO-COLUMN LAYOUT
+   ------------------------------------------------------- */
+.profile-grid {
+    display:               grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap:                   var(--space-lg);
+    align-items:           start;   /* Cards don't stretch to match each other */
+}
+
+/* -------------------------------------------------------
+   ACTIVITY LOG
+   ------------------------------------------------------- */
+.activity-list {
+    list-style: none;
+    padding:    0;
+}
+
+.activity-list li {
+    padding:       var(--space-sm) 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size:     var(--text-sm);
+    color:         var(--text-muted);
+}
+
+.activity-list li:last-child {
+    border-bottom: none;
+}
+
+.activity-list li::before {
+    content: "▸ ";
+    color:   var(--primary-color);
+    font-weight: bold;
+}
+
+.activity-time {
+    display:    block;
+    font-size:  1.2rem;
+    margin-top: 2px;
+    color:      var(--text-muted);
+    opacity:    0.8;
+}
+
+/* -------------------------------------------------------
+   PRO BADGE
+   ------------------------------------------------------- */
+.pro-badge {
+    display:          inline-block;
+    background-color: var(--star-color);
+    color:            #333;
+    font-size:        1.1rem;
+    font-weight:      700;
+    padding:          2px 10px;
+    border-radius:    12px;
+    margin-left:      var(--space-sm);
+    vertical-align:   middle;
+    letter-spacing:   0.5px;
+}
+
+/* -------------------------------------------------------
+   HERO / LANDING PAGE
+   ------------------------------------------------------- */
+.hero {
+    text-align: center;
+    padding:    var(--space-xl) var(--space-md);
+}
+
+.hero h1 {
+    /* clamp: scales between 28px and 52px based on screen width */
+    font-size:     clamp(2.8rem, 6vw, 5.2rem);
+    color:         var(--primary-color);
+    margin-bottom: var(--space-sm);
+}
+
+.hero p {
+    font-size:     clamp(1.5rem, 2.5vw, 1.9rem);
+    color:         var(--text-muted);
+    margin-bottom: var(--space-lg);
+    max-width:     600px;
+    margin-left:   auto;
+    margin-right:  auto;
+}
+
+.hero-buttons {
+    display:         flex;
+    gap:             var(--space-md);
+    justify-content: center;
+    flex-wrap:       wrap; /* Stack on very small screens */
+}
+
+/* Feature cards on the homepage */
+.features-grid {
+    display:               grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap:                   var(--space-lg);
+    margin-top:            var(--space-xl);
+    max-width:             800px;
+    margin-left:           auto;
+    margin-right:          auto;
+}
+
+.feature-card {
+    background-color: var(--card-bg);
+    border:           1px solid var(--border-color);
+    border-radius:    10px;
+    padding:          var(--space-lg);
+    text-align:       center;
+    box-shadow:       var(--shadow);
+}
+
+.feature-card .feature-icon {
+    font-size:     3.6rem;
+    margin-bottom: var(--space-sm);
+}
+
+/* -------------------------------------------------------
+   UPGRADE / PAYMENT PAGE
+   ------------------------------------------------------- */
+.upgrade-wrapper {
+    max-width: 540px;
+    margin:    0 auto;
+}
+
+.price-tag {
+    font-size:   3.6rem;
+    font-weight: 700;
+    color:       var(--primary-color);
+    margin:      var(--space-sm) 0;
+}
+
+.feature-list {
+    list-style: none;
+    padding:    0;
+    margin:     var(--space-md) 0;
+    text-align: left;
+}
+
+.feature-list li {
+    padding:   var(--space-sm) 0;
+    font-size: var(--text-base);
+    display:   flex;
+    gap:       var(--space-sm);
+}
+
+.feature-list li::before {
+    content:     "✓";
+    color:       #28a745;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* -------------------------------------------------------
+   UTILITY CLASSES
+   (small helpers you can add to any element)
+   ------------------------------------------------------- */
+.mt-xs  { margin-top: var(--space-xs); }
+.mt-sm  { margin-top: var(--space-sm); }
+.mt-md  { margin-top: var(--space-md); }
+.mt-lg  { margin-top: var(--space-lg); }
+.mb-xs  { margin-bottom: var(--space-xs); }
+.mb-sm  { margin-bottom: var(--space-sm); }
+.mb-md  { margin-bottom: var(--space-md); }
+.mb-lg  { margin-bottom: var(--space-lg); }
+
+.gap-sm { gap: var(--space-sm); }
+.gap-md { gap: var(--space-md); }
+
+.flex         { display: flex; }
+.flex-wrap    { flex-wrap: wrap; }
+.flex-center  { display: flex; align-items: center; justify-content: center; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-md); }
+.flex-col     { flex-direction: column; }
+
+.divider {
+    border:    none;
+    border-top: 1px solid var(--border-color);
+    margin:    var(--space-lg) 0;
+}
+
+.w-full { width: 100%; }
+
+/* -------------------------------------------------------
+   PAGE HEADER ROW
+   (used on dashboard, etc.)
+   ------------------------------------------------------- */
+.page-header {
+    display:         flex;
+    justify-content: space-between;
+    align-items:     flex-start;
+    flex-wrap:       wrap;
+    gap:             var(--space-md);
+    margin-bottom:   var(--space-lg);
+}
+
+.page-header-text h1 {
+    margin-bottom: 4px;
+}
+
+/* -------------------------------------------------------
+   EMPTY STATE (no movies yet)
+   ------------------------------------------------------- */
+.empty-state {
+    text-align: center;
+    padding:    var(--space-xl) var(--space-md);
+}
+
+.empty-state .empty-icon {
+    font-size:     5rem;
+    margin-bottom: var(--space-md);
+}
+
+/* -------------------------------------------------------
+   SCROLL TO TOP BUTTON
+   ------------------------------------------------------- */
+.scroll-top-btn {
+    position:         fixed;
+    bottom:           24px;
+    right:            24px;
+    width:            44px;
+    height:           44px;
+    border-radius:    50%;
+    background-color: var(--primary-color);
+    color:            white;
+    border:           none;
+    font-size:        2rem;
+    cursor:           pointer;
+    display:          none; /* Hidden until user scrolls down */
+    align-items:      center;
+    justify-content:  center;
+    box-shadow:       0 4px 12px rgba(229,9,20,0.4);
+    z-index:          99;
+    transition:       opacity 0.3s, transform 0.2s;
+}
+
+.scroll-top-btn.visible {
+    display: flex;
+}
+
+.scroll-top-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* -------------------------------------------------------
+   RESPONSIVE BREAKPOINTS
+   -------------------------------------------------------
+   We use mobile-first where possible, but these
+   max-width queries handle reducing complexity on small screens.
+   ------------------------------------------------------- */
+
+/* --- TABLET: screens narrower than 900px --- */
+@media (max-width: 900px) {
+
+    /* Profile page: stack into one column */
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- MOBILE: screens narrower than 700px --- */
+@media (max-width: 700px) {
+
+    html {
+        font-size: 58%; /* Slightly smaller base on phones */
+    }
+
+    /* Show hamburger, hide the links */
+    .nav-hamburger {
+        display: flex;
+    }
+
+    /* The nav links become a dropdown that slides in */
+    .navbar-links {
+        display:          none; /* Hidden until hamburger is clicked */
+        position:         absolute;
+        top:              60px; /* Height of the navbar */
+        left:             0;
+        right:            0;
+        background-color: var(--nav-bg);
+        flex-direction:   column;
+        align-items:      stretch;
+        padding:          var(--space-sm) 0;
+        box-shadow:       0 8px 16px rgba(0,0,0,0.3);
+        z-index:          99;
+        border-top:       1px solid rgba(255,255,255,0.1);
+    }
+
+    /* When JS adds .is-open, show the menu */
+    .navbar-links.is-open {
+        display: flex;
+    }
+
+    .navbar-links a,
+    .navbar-links .theme-toggle-btn {
+        padding:       var(--space-md) var(--space-lg);
+        border-radius: 0;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+        width:         100%;
+        text-align:    left;
+    }
+
+    .navbar-links .theme-toggle-btn {
+        border:      none;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+        color:       var(--nav-text);
+        font-size:   1.4rem;
+    }
+
+    /* Give navbar position:relative so the dropdown is positioned under it */
+    .navbar {
+        position: sticky;
+    }
+
+    .navbar-inner {
+        position: relative;
+        padding:  0 var(--space-md);
+    }
+
+    /* Page containers get less horizontal padding on phones */
+    .main-container {
+        padding: var(--space-md);
+    }
+
+    /* Movie grid: single column on phones */
+    .movie-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Stats bar: two columns on phones instead of many */
+    .stats-bar {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* Form rows (like expiry + CVV) stack on phones */
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    /* Features grid on homepage: single column */
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Page header: stack title and button */
+    .page-header {
+        flex-direction: column;
+        align-items:    flex-start;
+    }
+
+    .page-header .btn {
+        width: 100%; /* Full-width button on mobile */
+    }
+}
+
+/* --- SMALL PHONES: screens narrower than 400px --- */
+@media (max-width: 400px) {
+
+    /* Stats bar: single column on very small screens */
+    .stats-bar {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        padding: var(--space-md);
+    }
+
+    .btn {
+        padding: 10px var(--space-md);
+    }
+
+    /* Card action buttons: stack vertically */
+    .card-actions {
+        flex-direction: column;
+    }
+
+    .card-actions .btn {
+        width: 100%;
+    }
+}
