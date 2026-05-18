@@ -82,3 +82,94 @@ if (isset($_GET['token']) && !empty($_GET['token'])) {
 
 </body>
 </html>
+
+<!-- 
+PART 1: DATABASE SETUP
+
+Open XAMPP → Start Apache & MySQL → Open phpMyAdmin → Click "SQL" tab → Paste and run each block.
+Step 1: Create the Database
+
+SQL
+
+CREATE DATABASE cinelog;
+USE cinelog;
+
+Step 2: Create the Users Table
+
+SQL
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    is_verified TINYINT(1) DEFAULT 0,
+    verification_token VARCHAR(100) DEFAULT NULL,
+    is_pro TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+Step 3: Create the Movies Table
+
+SQL
+
+CREATE TABLE movies (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    title VARCHAR(150) NOT NULL,
+    rating TINYINT NOT NULL,
+    review TEXT,
+    watched_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+Step 4: Create the Activity Log Table
+
+SQL
+
+CREATE TABLE activity_log (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    action VARCHAR(255) NOT NULL,
+    logged_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+Step 5: Create the Password Resets Table
+
+SQL
+
+CREATE TABLE password_resets (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) NOT NULL,
+    token VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+PART 2: PHPMAILER SETUP (No Composer Needed)
+
+Step 1: Go to: https://github.com/PHPMailer/PHPMailer
+
+Step 2: Click the green "Code" button → "Download ZIP"
+
+Step 3: Extract the ZIP file. Inside you will find a src folder.
+
+Step 4: Inside your cinelog project folder, create a new folder called phpmailer.
+
+Step 5: Copy only these 3 files from the extracted ZIP's src folder into your cinelog/phpmailer/ folder:
+
+    Exception.php
+    PHPMailer.php
+    SMTP.php
+
+Step 6: In any PHP file where you need to send email, add these three lines at the top:
+
+PHP
+
+require 'phpmailer/Exception.php';
+require 'phpmailer/PHPMailer.php';
+require 'phpmailer/SMTP.php';
+
+Important: You will need a real Gmail account to send emails. In your Gmail account settings, enable 2-Step Verification, then create an App Password (Google Account → Security → App Passwords). Use that 16-character app password in the mailer config — NOT your real Gmail password.
+-->
