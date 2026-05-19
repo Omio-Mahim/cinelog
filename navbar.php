@@ -1,9 +1,4 @@
 <?php
-// ============================================================
-// navbar.php - Shared Navigation Bar
-// Every page includes this file with: require 'navbar.php';
-// This way, if you update the nav, ALL pages update at once.
-// ============================================================
 
 // We need the session to check if the user is logged in.
 // session_start() is safe to call multiple times — it only
@@ -103,16 +98,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </div><!-- end .navbar-inner -->
 </nav>
 
-<!-- ======================================================
-     SHARED JAVASCRIPT
-     Placed here so it runs on every page that includes navbar.php
-     ====================================================== -->
 <script>
-// -------------------------------------------------------
-// THEME TOGGLE — Dark / Light Mode
-// We save the user's choice in localStorage so it persists
-// across pages and browser sessions.
-// -------------------------------------------------------
 
 // Apply the saved theme as soon as this script runs
 // (before the page fully renders) to prevent a "flash" of wrong theme
@@ -151,10 +137,6 @@ function toggleTheme() {
     updateToggleButton();
 }
 
-// -------------------------------------------------------
-// HAMBURGER MENU — Mobile Navigation
-// Toggles the .is-open class on the menu and the button
-// -------------------------------------------------------
 function initHamburger() {
     var hamburger = document.getElementById('nav-hamburger');
     var navLinks  = document.getElementById('navbar-links');
@@ -198,11 +180,6 @@ function initHamburger() {
     });
 }
 
-// -------------------------------------------------------
-// SCROLL TO TOP BUTTON
-// Shows a button in the bottom-right corner when user
-// has scrolled down more than 300px
-// -------------------------------------------------------
 function initScrollTopButton() {
     var btn = document.getElementById('scroll-top-btn');
     if (!btn) return;

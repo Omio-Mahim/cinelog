@@ -1,9 +1,4 @@
 <?php
-// ============================================================
-// delete_movie.php - Delete a Movie (DELETE)
-// URL looks like: delete_movie.php?id=5
-// There is no form here - it just processes and redirects
-// ============================================================
 
 session_start();
 require_once 'db.php';

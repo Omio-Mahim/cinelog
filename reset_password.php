@@ -1,7 +1,5 @@
 <?php
-// ============================================================
-// reset_password.php - Set a New Password via Reset Link
-// ============================================================
+
 session_start();
 require_once 'db.php';
 

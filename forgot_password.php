@@ -1,7 +1,5 @@
 <?php
-// ============================================================
-// forgot_password.php - Request a Password Reset Email
-// ============================================================
+
 session_start();
 require_once 'db.php';
 require_once 'mailer.php';

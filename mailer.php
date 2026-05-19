@@ -1,9 +1,4 @@
 <?php
-// ============================================================
-// mailer.php - Email Sending Helper
-// This file has one simple function: send_email()
-// Call it from anywhere you need to send an email
-// ============================================================
 
 // Load the three PHPMailer class files we downloaded
 require_once 'phpmailer/Exception.php';
@@ -18,14 +13,6 @@ use PHPMailer\PHPMailer\Exception;
 // Load our config settings
 require_once 'config.php';
 
-// -------------------------------------------------------
-// send_email() - Sends a single email
-// Parameters:
-//   $to      = the recipient's email address (string)
-//   $subject = the email subject line (string)
-//   $body    = the HTML content of the email (string)
-// Returns: true on success, false on failure
-// -------------------------------------------------------
 function send_email($to, $subject, $body) {
 
     // Create a new PHPMailer object

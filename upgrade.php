@@ -1,7 +1,5 @@
 <?php
-// ============================================================
-// upgrade.php - CineLog Pro Upgrade (Dummy Payment Simulator)
-// ============================================================
+
 session_start();
 require_once 'db.php';
 

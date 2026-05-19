@@ -1,7 +1,5 @@
 <?php
-// ============================================================
-// index.php - Homepage / Landing Page
-// ============================================================
+
 session_start();
 
 // If already logged in, skip the landing page and go to dashboard

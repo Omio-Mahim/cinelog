@@ -1,8 +1,4 @@
 <?php
-// ============================================================
-// db.php - Database Connection
-// We use mysqli (MySQL Improved) to connect to our database
-// ============================================================
 
 // Pull in our settings from config.php
 require_once 'config.php';
