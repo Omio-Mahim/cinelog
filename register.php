@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password"
-                       placeholder="At least 6 characters"
+                       placeholder="6 characters, uppercase, lowercase, number, special character"
                        autocomplete="new-password">
             </div>
 
