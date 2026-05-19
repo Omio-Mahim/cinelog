@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $valid_token) {
 
         <?php if ($valid_token): ?>
         <p class="text-muted mb-md">Enter your new password below.</p>
-        <form method="POST" action="reset_password.php?token=<?php echo htmlspecialchars($token); ?>">
+        <form method="POST" action="reset_password.php?token=<?php echo htmlspecialchars($token); ?>" onsubmit="return validateResetForm()">
 
             <div class="form-group">
                 <label for="new_password">New Password</label>
@@ -113,6 +113,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $valid_token) {
         <?php endif; ?>
     </div>
 </div>
+    </div>
+    </div>
 
+    <script>
+        // Client-side validation for reset password using same policy as registration
+        function validateResetForm() {
+            var password = document.getElementById('new_password').value;
+            var confirm  = document.getElementById('confirm_password').value;
+
+            var pwdRegex = /^(?=.{6,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).*$/;
+
+            if (!pwdRegex.test(password)) {
+                alert('Password must be at least 6 characters and include uppercase, lowercase, a number, and a special character.');
+                return false;
+            }
+            if (password !== confirm) {
+                alert('Passwords do not match.');
+                return false;
+            }
+            return true;
+        }
+    </script>
 </body>
 </html>

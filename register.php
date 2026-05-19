@@ -173,10 +173,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             alert('Please enter your email address.');
             return false;
         }
-        if (password.length < 6) {
-            alert('Password must be at least 6 characters.');
-            return false;
-        }
+            // Password policy: min 6 chars, at least one lowercase, one uppercase, one digit, one special char
+            var pwdRegex = /^(?=.{6,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).*$/;
+            if (!pwdRegex.test(password)) {
+                alert('Password must be at least 6 characters and include uppercase, lowercase, a number, and a special character.');
+                return false;
+            }
         if (password !== confirm) {
             alert('Passwords do not match!');
             return false;
